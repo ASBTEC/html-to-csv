@@ -3,10 +3,14 @@
 
 # Usage
 # Arg1: email value
-# Arg2: relative path to qr file
+
 
 email_value="$1"
-file_name="$2"
+
+my_file_path=
+for file_path in output/*; do
+  my_file_path=$file_path
+done
 
 print_args()
 {
@@ -39,7 +43,7 @@ A
 
 
 ;type=text/plain" \
-    -F "file=@${PROJECT_FOLDER}/output/$file_name;type=text/html;encoder=base64" \
+    -F "file=@${PROJECT_FOLDER}/$my_file_path;type=text/html;encoder=base64" \
     -F '=)' \
     -H "Subject: Recepció del teu QR" \
     -H "From: Informatica ASBTEC <informatica@asbtec.cat>" \

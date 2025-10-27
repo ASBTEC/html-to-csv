@@ -4,11 +4,11 @@ name: Build_and_send_QR
 on:
   workflow_dispatch:
     inputs:
-      filename:
-        description: 'File name inside GDrive of the file to transform'
-        required: true
       email:
         description: 'Email where we will send the file'
+        required: true
+      url:
+        description: 'URL with the link to the file to transform'
         required: true
 
 env:
@@ -44,7 +44,7 @@ jobs:
           DRIVE_FOLDER_ID: ${{ secrets.DRIVE_FORM_UPLOADS_FOLDER_ID }}
           GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/sa.json
         run: |
-          python ./src/download.py ${{ github.event.inputs.filename }}
+          python ./src/download.py -u ${{ github.event.inputs.url }} -o ./data/input.csv
 
       - name: Transform file into CSV
         run: |
@@ -53,5 +53,5 @@ jobs:
       - name: Send email
         run: |
           chmod u+x src/send_emails.sh 
-          ./src/send_emails.sh ${{ github.event.inputs.email }} "${{ github.event.inputs.filename }}"
+          ./src/send_emails.sh ${{ github.event.inputs.email }}
           

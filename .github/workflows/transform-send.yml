@@ -7,7 +7,7 @@ on:
       email:
         description: 'Email where we will send the file'
         required: true
-      url:
+      file_url:
         description: 'URL with the link to the file to transform'
         required: true
 

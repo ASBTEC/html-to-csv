@@ -52,9 +52,7 @@ def main():
     )
     args = parser.parse_args()
 
-    creds_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS", "").strip()
-    if not creds_path:
-        die("Missing env var GOOGLE_APPLICATION_CREDENTIALS (path to service account JSON).")
+    creds_path = "./sa.json"
 
     service = build_drive_service(creds_path)
     file_id = args.id

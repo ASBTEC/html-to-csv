@@ -26,7 +26,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'  # Or any version you need
+          python-version: '3.11'  # Or any version you need
 
       - name: Install dependencies
         run: |
@@ -44,7 +44,7 @@ jobs:
           DRIVE_FOLDER_ID: ${{ secrets.DRIVE_FORM_UPLOADS_FOLDER_ID }}
           GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/sa.json
         run: |
-          python ./src/download.py -u ${{ github.event.inputs.url }} -o ./data/input.csv
+          python ./src/download.py -u ${{ github.event.inputs.file_url }} -o ./data/input.csv
 
       - name: Transform file into CSV
         run: |

@@ -14,7 +14,7 @@ ATTACH_PATH="${PROJECT_FOLDER}/${my_file_path}"
 ATTACH_NAME="$(basename "$ATTACH_PATH")"
 
 # RFC 2047-encoded UTF-8 subject (Recepció del teu QR)
-SUBJECT_ENC="=?UTF-8?B?UmVjZXBjacOzIGRlbCB0ZXUgUVI=?="
+SUBJECT_ENC="=?UTF-8?B?UmVjZXBjacOzIGRlbCB0ZXUgQ1NW?="
 
 curl -v --url 'smtps://smtp.gmail.com:465' \
   --ssl-reqd \

@@ -1,50 +1,31 @@
-
 #!/usr/bin/env bash
-
-# Usage
-# Arg1: email value
-
+set -euo pipefail
 
 email_value="$1"
 
+# pick the (only) file from output/
 my_file_path=
 for file_path in output/*; do
-  my_file_path=$file_path
+  my_file_path="$file_path"
 done
 
-print_args()
-{
-  echo "from: $EMAIL_USERNAME"
-  echo "to: $email_value"
-  echo "pass: **"
-}
-
 PROJECT_FOLDER="$(cd "$(dirname "$(realpath "$0")")/../" &>/dev/null && pwd)"
+ATTACH_PATH="${PROJECT_FOLDER}/${my_file_path}"
+ATTACH_NAME="$(basename "$ATTACH_PATH")"
+
+# RFC 2047-encoded UTF-8 subject (Recepció del teu QR)
+SUBJECT_ENC="=?UTF-8?B?UmVjZXBjacOzIGRlbCB0ZXUgUVI=?="
 
 curl -v --url 'smtps://smtp.gmail.com:465' \
   --ssl-reqd \
   --mail-from "${EMAIL_USERNAME}" \
   --mail-rcpt "${email_value}" \
-  --mail-rcpt "${EMAIL_USERNAME}" \
-  --mail-rcpt "informatica@asbtec.cat" \
   --user "${EMAIL_USERNAME}:${EMAIL_PASSWORD}" \
   -F '=(;type=multipart/mixed' \
-  -F "=Hola
-
-Aquí tens el fitxer CSV que has sol·licitat amb formulari a la vocalia d'informàtica.
-
-Aquest missatge ha estat generat automàticament. Per a qualsevol dubte o incidència, pots contactar-nos a informatica@asbtec.cat.
-
-Fins aviat!
-
-Atentament,
-
-A
-
-
-;type=text/plain" \
-    -F "file=@${PROJECT_FOLDER}/$my_file_path;type=text/html;encoder=base64" \
-    -F '=)' \
-    -H "Subject: Recepció del teu QR" \
-    -H "From: Informatica ASBTEC <informatica@asbtec.cat>" \
-    -H "To: ${EMAIL_USERNAME} <${EMAIL_USERNAME}>"
+  -F $'text=Hola\n\nAquí tens el fitxer CSV que has sol·licitat amb formulari a la vocalia d\'informàtica.\n\nAquest missatge ha estat generat automàticament. Per a qualsevol dubte o incidència, pots contactar-nos a informatica@asbtec.cat.\n\nFins aviat!\n\nAtentament,\n\nASBTEC\n;type=text/plain;charset=utf-8' \
+  -F "file=@${ATTACH_PATH};type=text/csv;charset=utf-8;encoder=base64;filename=${ATTACH_NAME}" \
+  -F '=)' \
+  -H "MIME-Version: 1.0" \
+  -H "Subject: ${SUBJECT_ENC}" \
+  -H 'From: "Informàtica ASBTEC" <informatica@asbtec.cat>' \
+  -H "To: <${email_value}>"

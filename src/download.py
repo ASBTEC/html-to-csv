@@ -18,6 +18,8 @@ def die(msg: str, code: int = 1):
 def build_drive_service(creds_path: str):
     if not os.path.exists(creds_path):
         die(f"GOOGLE_APPLICATION_CREDENTIALS file not found: {creds_path}")
+
+
     credentials = service_account.Credentials.from_service_account_file(creds_path, scopes=SCOPES)
     return build("drive", "v3", credentials=credentials, cache_discovery=False)
 
@@ -52,7 +54,10 @@ def main():
     )
     args = parser.parse_args()
 
-    creds_path = "./sa.json"
+    creds_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+    print(creds_path)
+    f = "".join(open("demofile.txt").readlines())
+    print(f)
 
     service = build_drive_service(creds_path)
     file_id = args.id

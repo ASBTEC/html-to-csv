@@ -36,7 +36,7 @@ jobs:
       - name: Write Drive credentials
       # Your SA key JSON is stored as a repo/Org secret named GDRIVE_SA_KEY_JSON
         run: |
-          echo "${{ secrets.GDRIVE_SA_KEY_JSON }}" > sa.json
+          echo "${{ secrets.GDRIVE_SA_KEY_JSON }}" > ${{ github.workspace }}/sa.json
         shell: bash
 
       - name: Download file

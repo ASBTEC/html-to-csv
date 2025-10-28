@@ -47,6 +47,6 @@ for filename in os.listdir(input_dir):
         continue
     # Only process files (skip subfolders)
     if os.path.isfile(input_path):
-        output_path = os.path.join(output_dir, filename)
+        output_path = os.path.join(output_dir, filename + ".csv")
         extract_csv_from_html(input_path, output_path)
         print(f"Processed {filename} → {output_path}")

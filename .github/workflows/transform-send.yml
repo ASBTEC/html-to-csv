@@ -43,7 +43,7 @@ jobs:
           DRIVE_FOLDER_ID: ${{ secrets.DRIVE_FORM_UPLOADS_FOLDER_ID }}
           GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/sa.json
         run: |
-          python ./src/download.py -i ${{ github.event.inputs.file_url }} -o ./data/input.csv
+          python ./src/download.py -i ${{ github.event.inputs.file_url }} -o ./data/input.html
 
       - name: Transform file into CSV
         run: |

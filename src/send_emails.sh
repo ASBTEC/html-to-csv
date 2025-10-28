@@ -37,5 +37,5 @@ Aleix Mariné-Tena, Vocal d'Informàtica (com a projecció astral de l'automatis
   -F '=)' \
   -H "MIME-Version: 1.0" \
   -H "Subject: ${SUBJECT_ENC}" \
-  -H 'From: "Informàtica ASBTEC" <informatica@asbtec.cat>' \
+  -H 'From: "Informatica ASBTEC" <informatica@asbtec.cat>' \
   -H "To: <${email_value}>"

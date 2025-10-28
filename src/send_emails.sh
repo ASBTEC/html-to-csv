@@ -31,7 +31,7 @@ Aquest missatge ha estat generat automàticament. Per a qualsevol dubte o incid�
 Amunt ASBTEC!
 
 
-Aleix Mariné-Tena, vocal d'Informàtica (com a projecció astral de l'automatisme)
+Aleix Mariné-Tena, Vocal d'Informàtica (com a projecció astral de l'automatisme)
 ;type=text/plain" \
   -F "file=@${ATTACH_PATH};type=text/csv;charset=utf-8;encoder=base64;filename=${ATTACH_NAME}" \
   -F '=)' \

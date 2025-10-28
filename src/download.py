@@ -21,26 +21,6 @@ def build_drive_service(creds_path: str):
     credentials = service_account.Credentials.from_service_account_file(creds_path, scopes=SCOPES)
     return build("drive", "v3", credentials=credentials, cache_discovery=False)
 
-def extract_file_id_from_url(url: str) -> str:
-    s = str(url or "")
-    # /file/d/<id>/
-    import re
-    m = re.search(r"/file/d/([a-zA-Z0-9_-]{10,})/", s)
-    if m:
-        return m.group(1)
-    # ...?id=<id>
-    m = re.search(r"[?&]id=([a-zA-Z0-9_-]{10,})", s)
-    if m:
-        return m.group(1)
-    # uc?id=<id>
-    m = re.search(r"uc\?id=([a-zA-Z0-9_-]{10,})", s)
-    if m:
-        return m.group(1)
-    # As a last resort, assume the whole thing is already an ID
-    if s and all(c.isalnum() or c in "-_" for c in s) and len(s) >= 10:
-        return s
-    die("Could not extract a Drive file ID from the provided URL/ID.")
-
 def fetch_file_name(service, file_id: str) -> str:
     meta = service.files().get(fileId=file_id, fields="id,name").execute()
     name = meta.get("name")
@@ -55,8 +35,7 @@ def download_file(service, file_id: str, out_path: Path):
     downloader = MediaIoBaseDownload(fh, request, chunksize=8 * 1024 * 1024)
     done = False
     while not done:
-        status, done = downloader.next_chunk()
-        # Optional: print progress here
+        _, done = downloader.next_chunk()
     with open(out_path, "wb") as f:
         f.write(fh.getvalue())
     print(f"Downloaded to: {out_path}")
@@ -64,9 +43,9 @@ def download_file(service, file_id: str, out_path: Path):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Download a Google Drive file by URL (or ID) using a service account."
+        description="Download a Google Drive file by ID using a service account."
     )
-    parser.add_argument("-u", "--url", required=True, help="Google Drive file URL (or raw file ID)")
+    parser.add_argument("-i", "--id", required=True, help="Google Drive file ID (e.g. 1CZgZi...)")
     parser.add_argument(
         "-o", "--output", required=True,
         help="Output directory or file path. If a directory, the Drive file name is used."
@@ -78,7 +57,7 @@ def main():
         die("Missing env var GOOGLE_APPLICATION_CREDENTIALS (path to service account JSON).")
 
     service = build_drive_service(creds_path)
-    file_id = extract_file_id_from_url(args.url)
+    file_id = args.id
 
     out = Path(args.output).resolve()
     if out.exists() and out.is_dir():
@@ -86,14 +65,12 @@ def main():
         filename = fetch_file_name(service, file_id)
         out_path = out / filename
     else:
-        # If output looks like a file path (possibly in a non-existing dir), respect it
-        # If it ends with a path separator or doesn't have a suffix but you intended a dir,
-        # just create that dir beforehand.
         if str(args.output).endswith(("/", "\\")):
             die("Output points to a directory path that doesn't exist. Create it first or pass a file path.")
         out_path = out
 
     download_file(service, file_id, out_path)
+
 
 if __name__ == "__main__":
     main()

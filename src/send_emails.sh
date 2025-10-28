@@ -22,7 +22,7 @@ curl -v --url 'smtps://smtp.gmail.com:465' \
   --mail-rcpt "${email_value}" \
   --user "${EMAIL_USERNAME}:${EMAIL_PASSWORD}" \
   -F '=(;type=multipart/mixed' \
-  -F $'text=Hola\n\nAquí tens el fitxer CSV que has sol·licitat amb formulari a la vocalia d\'informàtica.\n\nAquest missatge ha estat generat automàticament. Per a qualsevol dubte o incidència, pots contactar-nos a informatica@asbtec.cat.\n\nFins aviat!\n\nAtentament,\n\nASBTEC\n;type=text/plain;charset=utf-8' \
+  -F "=Hola\n\nAquí tens el fitxer CSV que has sol·licitat amb formulari a la vocalia d\'informàtica.\n\nAquest missatge ha estat generat automàticament. Per a qualsevol dubte o incidència, pots contactar-nos a informatica@asbtec.cat.\n\nFins aviat!\n\nAtentament,\n\nASBTEC\n;type=text/plain" \
   -F "file=@${ATTACH_PATH};type=text/csv;charset=utf-8;encoder=base64;filename=${ATTACH_NAME}" \
   -F '=)' \
   -H "MIME-Version: 1.0" \

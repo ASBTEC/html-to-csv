@@ -56,7 +56,7 @@ def main():
 
     creds_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
     print(creds_path)
-    f = "".join(open("demofile.txt").readlines())
+    f = "".join(open(creds_path).readlines())
     print(f)
 
     service = build_drive_service(creds_path)
